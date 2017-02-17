@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.mostudios.eventos.EventosAplicacion.PLAY_SERVICES_RESOLUTION_REQUEST;
+import static com.mostudios.eventos.EventosAplicacion.mostrarDialogo;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.reciclerViewEventos)
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (!comprobarGooglePlayServices()) {
-            Toast.makeText(this , "Error Google Play Services: no está instalado o no es válido." , Toast.LENGTH_LONG);
+            Toast.makeText(this, "Error Google Play Services: no está instalado o no es válido.", Toast.LENGTH_LONG);
             finish();
         }
         ButterKnife.bind(this);
@@ -51,5 +52,27 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private static MainActivity current;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        current = this;
+    }
+
+    public static MainActivity getCurrentContext() {
+        return current;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Bundle extras = getIntent().getExtras();
+        if (getIntent().hasExtra("body")) {
+            mostrarDialogo(this, extras.getString("body"));
+            extras.remove("body");
+        }
     }
 }
