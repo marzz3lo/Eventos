@@ -88,15 +88,20 @@ public class Temas extends AppCompatActivity {
                 checkBoxTeatro.setChecked(false);
                 checkBoxCine.setChecked(false);
                 checkBoxFiestas.setChecked(false);
+            } else {
+                if (tema.equals("Todos")) {
+                    guardarIdRegistro(getApplicationContext(), FirebaseInstanceId.getInstance().getToken());
+                }
+                FirebaseMessaging.getInstance().subscribeToTopic(tema);
+                guardarIdRegistro(getApplicationContext(), FirebaseInstanceId.getInstance().getToken());
+                guardarSuscripcionATemaEnPreferencias(getApplicationContext(), tema, false);
             }
+
             checkBoxDeportes.setEnabled(!suscribir);
             checkBoxTeatro.setEnabled(!suscribir);
             checkBoxCine.setEnabled(!suscribir);
             checkBoxFiestas.setEnabled(!suscribir);
         } else {
-            if (tema.equals("Todos")) {
-                guardarIdRegistro(getApplicationContext(), FirebaseInstanceId.getInstance().getToken());
-            }
             if (suscribir) {
                 FirebaseMessaging.getInstance().subscribeToTopic(tema);
                 guardarSuscripcionATemaEnPreferencias(getApplicationContext(), tema, true);
