@@ -7,8 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import static com.mostudios.eventos.EventosAplicacion.eliminarIdRegistro;
+import static com.mostudios.eventos.EventosAplicacion.guardarIdRegistro;
 import static com.mostudios.eventos.EventosAplicacion.mostrarDialogo;
 
 /**
@@ -91,10 +94,14 @@ public class Temas extends AppCompatActivity {
             checkBoxCine.setEnabled(!suscribir);
             checkBoxFiestas.setEnabled(!suscribir);
         } else {
+            if (tema.equals("Todos")) {
+                guardarIdRegistro(getApplicationContext(), FirebaseInstanceId.getInstance().getToken());
+            }
             if (suscribir) {
                 FirebaseMessaging.getInstance().subscribeToTopic(tema);
                 guardarSuscripcionATemaEnPreferencias(getApplicationContext(), tema, true);
             } else {
+                eliminarIdRegistro(getApplicationContext());
                 FirebaseMessaging.getInstance().unsubscribeFromTopic(tema);
                 guardarSuscripcionATemaEnPreferencias(getApplicationContext(), tema, false);
             }
