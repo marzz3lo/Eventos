@@ -27,6 +27,12 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
+        <activity
+            android:name=".Temas"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        6. Inserta al final
         <service
             android:name=".EventosFCMService">
             <intent-filter>
