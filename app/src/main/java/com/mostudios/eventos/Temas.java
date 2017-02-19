@@ -89,7 +89,7 @@ public class Temas extends AppCompatActivity {
                 checkBoxCine.setChecked(false);
                 checkBoxFiestas.setChecked(false);
             } else {
-                FirebaseMessaging.getInstance().subscribeToTopic(tema);
+                 FirebaseMessaging.getInstance().subscribeToTopic(tema);
                 guardarIdRegistro(getApplicationContext(), FirebaseInstanceId.getInstance().getToken());
                 guardarSuscripcionATemaEnPreferencias(getApplicationContext(), tema, false);
             }
