@@ -62,6 +62,7 @@ public class EventoDetalles extends AppCompatActivity {
     final int SOLICITUD_SUBIR_PUTFILE = 2;
     final int SOLICITUD_SELECCION_STREAM = 100;
     final int SOLICITUD_SELECCION_PUTFILE = 101;
+    final int SOLICITUD_FOTOGRAFIAS_DRIVE = 102;
     private ProgressDialog progresoSubida;
     Boolean subiendoDatos = false;
     StorageReference mStorageRef; //Referencia usada para subir el fichero.
@@ -137,6 +138,11 @@ public class EventoDetalles extends AppCompatActivity {
                 break;
             case R.id.action_putFile:
                 seleccionarFotografiaDispositivo(vista, SOLICITUD_SELECCION_PUTFILE);
+                break;
+            case R.id.action_fotografiasDrive:
+                Intent intent = new Intent(getBaseContext(), FotografiasDrive.class);
+                intent.putExtra("evento", evento);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
