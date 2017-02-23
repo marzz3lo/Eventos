@@ -13,4 +13,12 @@
         android:orderInCategory="101"
         android:title="Elegir imagen"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_compartir_foto"
+        android:orderInCategory="102"
+        android:title="Hacer foto para compartir"
+        app:showAsAction="never"/>
+
+
 </menu>
