@@ -11,6 +11,7 @@
     <application
         android:name=".EventosAplicacion"
         android:allowBackup="true"
+        android:fullBackupContent="@xml/mybackupscheme">
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
