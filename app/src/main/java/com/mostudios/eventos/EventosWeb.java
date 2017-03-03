@@ -27,11 +27,14 @@ public class EventosWeb extends AppCompatActivity {
 
     WebView navegador;
     ProgressDialog dialogo;
-
+    String evento;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.eventos_web);
+
+        Bundle extras = getIntent().getExtras();
+        evento = extras.getString("evento");
 
         ActivityCompat.requestPermissions(EventosWeb.this, new String[]{android.Manifest.permission.ACCESS_NETWORK_STATE}, 2);
 
@@ -72,6 +75,7 @@ public class EventosWeb extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 dialogo.dismiss();
+                navegador.loadUrl("javascript:muestraEvento(\""+evento+"\");");
             }
         });
     }
