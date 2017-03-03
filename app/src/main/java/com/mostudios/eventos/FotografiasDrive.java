@@ -64,8 +64,8 @@ public class FotografiasDrive extends AppCompatActivity {
     private static Uri uriFichero;
     private String idCarpeta = "";
     private String idCarpetaEvento = "";
-    private String idCarpetaCompartida = "0B4XQiPWDnG6HRVZnZGZLVkgyNjQ";
-//    private String idCarpetaCompartida = "0B0BnNZ_qoOweZGY0NDgySDNqOUk";
+//    private String idCarpetaCompartida = "0B4XQiPWDnG6HRVZnZGZLVkgyNjQ";   //mia propia
+    private String idCarpetaCompartida = "0B0BnNZ_qoOweZGY0NDgySDNqOUk";  //compartida para el reto
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
