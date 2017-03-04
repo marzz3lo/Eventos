@@ -42,6 +42,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.mostudios.eventos.EventosAplicacion.acercaDe;
+
 /**
  * Created by marzzelo on 19/2/2017.
  */
@@ -122,6 +124,8 @@ public class EventoDetalles extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detalles, menu);
+
+        if (!acercaDe) { menu.removeItem(R.id.action_acercaDe); }
         return true;
     }
 

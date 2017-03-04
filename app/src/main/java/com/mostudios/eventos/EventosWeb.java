@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -28,6 +29,8 @@ public class EventosWeb extends AppCompatActivity {
     WebView navegador;
     ProgressDialog dialogo;
     String evento;
+    final InterfazComunicacion miInterfazJava = new InterfazComunicacion(this);
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +79,11 @@ public class EventosWeb extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 dialogo.dismiss();
                 navegador.loadUrl("javascript:muestraEvento(\""+evento+"\");");
+                navegador.loadUrl("javascript:colorFondo(\""+EventosAplicacion.colorFondo+"\");");
             }
         });
+
+        navegador.addJavascriptInterface(miInterfazJava, "jsInterfazNativa");
     }
 
     @Override
@@ -116,6 +122,19 @@ public class EventosWeb extends AppCompatActivity {
             navegador.goBack();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    public class InterfazComunicacion {
+        Context mContext;
+
+        InterfazComunicacion(Context c) {
+            mContext = c;
+        }
+
+        @JavascriptInterface
+        public void volver() {
+            finish();
         }
     }
 
