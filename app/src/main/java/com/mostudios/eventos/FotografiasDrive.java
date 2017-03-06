@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +45,7 @@ import java.util.Locale;
  */
 
 public class FotografiasDrive extends AppCompatActivity {
-    public TextView mDisplay;
+    static WebView mDisplay;
     String evento;
     static Drive servicio = null;
     static GoogleAccountCredential credencial = null;
@@ -64,15 +65,19 @@ public class FotografiasDrive extends AppCompatActivity {
     private static Uri uriFichero;
     private String idCarpeta = "";
     private String idCarpetaEvento = "";
-//    private String idCarpetaCompartida = "0B4XQiPWDnG6HRVZnZGZLVkgyNjQ";   //mia propia
-    private String idCarpetaCompartida = "0B0BnNZ_qoOweZGY0NDgySDNqOUk";  //compartida para el reto
+    private String idCarpetaCompartida = "0B4XQiPWDnG6HRVZnZGZLVkgyNjQ";   //mia propia
+//    private String idCarpetaCompartida = "0B0BnNZ_qoOweZGY0NDgySDNqOUk";  //compartida para el reto
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fotografias_drive);
         registerReceiver(mHandleMessageReceiver, new IntentFilter(DISPLAY_MESSAGE_ACTION));
-        mDisplay = (TextView) findViewById(R.id.txtDisplay);
+
+        mDisplay = (WebView) findViewById(R.id.display);
+        mDisplay.getSettings().setJavaScriptEnabled(true);
+        mDisplay.getSettings().setBuiltInZoomControls(false);
+        mDisplay.loadUrl("file:///android_asset/fotografias.html");
 
         Bundle extras = getIntent().getExtras();
         evento = extras.getString("evento");
@@ -392,7 +397,7 @@ public class FotografiasDrive extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String nuevoMensaje = intent.getExtras().getString("mensaje");
-            mDisplay.append(nuevoMensaje + "\n");
+
         }
     };
 
@@ -411,9 +416,10 @@ public class FotografiasDrive extends AppCompatActivity {
                 public void run() {
                     try {
                         mostrarCarga(FotografiasDrive.this, "Listando archivos...");
+                        vaciarLista(getBaseContext());
                         FileList ficheros = servicio.files().list().setQ("'" + idCarpetaEvento + "' in parents").setFields("*").execute();
                         for (File fichero : ficheros.getFiles()) {
-                            mostrarTexto(getBaseContext(), fichero.getOriginalFilename());
+                            addItem(FotografiasDrive.this, fichero.getOriginalFilename(), fichero.getThumbnailLink());
                         }
                         mostrarMensaje(FotografiasDrive.this, "¡Archivos listados!");
                         ocultarCarga(FotografiasDrive.this);
@@ -429,6 +435,21 @@ public class FotografiasDrive extends AppCompatActivity {
             });
             t.start();
         }
+    }
+
+    static void addItem(final Context context, final String fichero, final String imagen) {
+        carga.post(new Runnable() {
+            public void run() {
+                mDisplay.loadUrl(
+                        "javascript:add(\"" + fichero + "\",\"" + imagen + "\");");
+            }
+        });
+    }
+    static void vaciarLista(final Context context) {
+        carga.post(new Runnable() {
+            public void run() { mDisplay.loadUrl("javascript:vaciar()");
+            }
+        });
     }
 
 }
