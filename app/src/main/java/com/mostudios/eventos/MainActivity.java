@@ -20,9 +20,12 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.appinvite.AppInviteInvitation;
+import com.google.android.gms.appinvite.AppInviteInvitationResult;
+import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -80,6 +83,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.GET_ACCOUNTS}, 3);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this).addApi(AppInvite.API).enableAutoManage(this, this).build();
+
+        boolean autoLaunchDeepLink = true;
+        AppInvite.AppInviteApi.getInvitation(mGoogleApiClient, this, autoLaunchDeepLink).setResultCallback(new ResultCallback<AppInviteInvitationResult>() {
+            @Override
+            public void onResult(AppInviteInvitationResult result) {
+                if (result.getStatus().isSuccess()) {
+                    Intent intent = result.getInvitationIntent();
+                    String deepLink = AppInviteReferral.getDeepLink(intent);
+                    String invitationId = AppInviteReferral.getInvitationId(intent);
+                    android.net.Uri url = Uri.parse(deepLink);
+                    String descuento = url.getQueryParameter("descuento");
+                    mostrarDialogo(getApplicationContext(), "Tienes un descuento del " + descuento + "% gracias a la invitación: " + invitationId);
+                }
+            }
+        });
     }
 
     private boolean comprobarGooglePlayServices() {
