@@ -76,7 +76,11 @@ public class EventoDetalles extends AppCompatActivity {
         ButterKnife.bind(this);
         Bundle extras = getIntent().getExtras();
         evento = extras.getString("evento");
-        if (evento == null) evento = "";
+        if (evento == null) {
+            android.net.Uri url = getIntent().getData();
+            evento = url.getQueryParameter("evento");
+            if (evento==null) evento = "";
+        }
         registro = EventosAplicacion.getItemsReference().child(evento);
         registro.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -125,7 +129,11 @@ public class EventoDetalles extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detalles, menu);
 
-        if (!acercaDe) { menu.removeItem(R.id.action_acercaDe); }
+        if (acercaDe==null) acercaDe=true;
+
+        if (!acercaDe) {
+            menu.removeItem(R.id.action_acercaDe);
+        }
         return true;
     }
 
